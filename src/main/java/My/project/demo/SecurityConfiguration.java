@@ -3,7 +3,8 @@ package My.project.demo;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 //import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+//import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.core.userdetails.User;
@@ -22,18 +23,18 @@ import static org.springframework.security.config.Customizer.withDefaults;
 */
 @Configuration
 @EnableWebSecurity
-@EnableGlobalMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        // @formatter:off
         http
-                .authorizeHttpRequests((authorize) -> authorize
-                        .anyRequest().authenticated()
-                )
-                .httpBasic(withDefaults())
-                .formLogin(withDefaults());
-        // @formatter:on
+            .authorizeHttpRequests((authorize) -> authorize
+                .requestMatchers("/").permitAll()
+                .requestMatchers("/login").permitAll()
+                .requestMatchers("/managers").hasAnyRole("MANAGERS", "ADMIN")
+                .requestMatchers("/users").hasAnyRole("USERS", "MANAGERS")
+                .anyRequest().authenticated())
+            .formLogin(withDefaults());
         return http.build();
     }
 
@@ -45,12 +46,12 @@ public class SecurityConfiguration {
 	UserDetails user = users
 		.username("user")
 		.password("password")
-		.roles("USER")
+		.roles("USERS")
 		.build();
 	UserDetails admin = users
 		.username("admin")
 		.password("password")
-		.roles("USER", "ADMIN")
+		.roles("USERS", "ADMIN")
 		.build();
 	return new InMemoryUserDetailsManager(user, admin);
 }
