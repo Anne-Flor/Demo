@@ -2,6 +2,7 @@ package My.project.demo;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 //import org.springframework.security.config.annotation.authentication.configuration.EnableGlobalAuthentication;
 //import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -30,7 +31,7 @@ public class SecurityConfiguration {
         http
             .authorizeHttpRequests((authorize) -> authorize
                 .requestMatchers("/").permitAll()
-                .requestMatchers("/login").permitAll()
+                .requestMatchers(HttpMethod.POST,"/login").permitAll()
                 .requestMatchers("/managers").hasAnyRole("MANAGERS", "ADMIN")
                 .requestMatchers("/users").hasAnyRole("USERS", "MANAGERS")
                 .anyRequest().authenticated())
