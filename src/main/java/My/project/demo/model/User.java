@@ -1,11 +1,7 @@
 package My.project.demo.model;
 
-import org.hibernate.mapping.Array;
-//import org.hibernate.mapping.List;
 import java.util.List;
 import java.util.ArrayList;
-
-
 
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -17,7 +13,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.FetchType;
-
 
 @Entity
 @Table(name = "tab_user")
